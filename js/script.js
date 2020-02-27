@@ -3,130 +3,72 @@ Treehouse Techdegree:
 FSJS project 2 - List Filter and Pagination
 ******************************************/
 
-// Study guide for this project - https://drive.google.com/file/d/1OD1diUsTMdpfMDv677TfL1xO2CEkykSz/view?usp=sharing
 
-
-/*** 
-   Add your global variables that store the DOM elements you will 
-   need to reference and/or manipulate. 
-   
-   But be mindful of which variables should be global and which 
-   should be locally scoped to one of the two main functions you're 
-   going to create. A good general rule of thumb is if the variable 
-   will only be used inside of a function, then it can be locally 
-   scoped to that function.
-***/
 
 let studentList = document.querySelectorAll(".student-item")  //selects all elements with class .student-item
-const numberOfItemsOnPage = 10;
+const numberOfItemsOnPage = 10; // sets number of items i want to see on each page
 
-/***
-   Create the `showPage` function to hide all of the items in the
-   list except for the ten you want to show.
-
-   Pro Tips:
-     - Keep in mind that with a list of 54 students, the last page
-       will only display four.
-     - Remember that the first student has an index of 0.
-     - Remember that a function `parameter` goes in the parens when
-       you initially define the function, and it acts as a variable
-       or a placeholder to represent the actual function `argument`
-       that will be passed into the parens later when you call or
-       "invoke" the function
-***/
+/**
+ * Loops throught student list items and changes display value
+ * hides all list items other than list items within startIndex and endIndex
+ * 
+ * @param {list} stdntList - a node list of html elements 
+ * @param {number} page - current page
+ */
 
 function showPage(stdntList, page) {
-
    let startIndex = (page * numberOfItemsOnPage) - numberOfItemsOnPage;
    let endIndex = page * numberOfItemsOnPage;
 
    for (let index = 0; index < stdntList.length; index++) {
-      stdntList[index].style.display = "none";   //changes the display property for each student Item,
+      stdntList[index].style.display = "none";
       if (index >= startIndex && index < endIndex) {
          stdntList[index].style.display = "block";
       }
    }
-
 }
 
-showPage(studentList, 6);
-
-/***
-   Create the `appendPageLinks function` to generate, append, and add
-   functionality to the pagination buttons.
-***/
-
+/**
+ * Creates the necessary elements (div, ul, li, a) for pagination
+ * for loop - creates (li, a) for every 10 student items and appends them to parent
+ * for loop - Adds on click event listener to every li element
+ * nested for loop - removes class attribute from all a elements
+ * calls showPage()
+ * 
+ * @param {list} stdntList - a node list of html elements 
+ */
 
 function appendPageLinks(stdntList) {
    let totalPages = Math.ceil(stdntList.length / numberOfItemsOnPage); // get page number
-   let divContainer = document.querySelector(".page");  // get div.page container
+   let divContainer = document.querySelector(".page");  // get paremt div.page container
    let divPagination = document.createElement("div");   // create div pagination container
-   let nestedUL = document.createElement("ul");
-   // let liElement = document.createElement("li");
-   // let aElement = document.createElement("a");        // create nested ul element for pagination div
-   divPagination.className = "pagination";              // 
-   divPagination.append(nestedUL);
-   // nestedUL.append("") // testing nestedUL
-   // divContainer.append(divPagination);
+   let nestedUL = document.createElement("ul");         // create nested ul element
+   divPagination.className = "pagination";              // add class to div pagination container 
+   divPagination.append(nestedUL);                       // add ul into div pagination container
+   divContainer.append(divPagination);  // add div pagination container to parent div.page container 
 
    for (let index = 0; index < totalPages; index++) {
-      let liElement = document.createElement("li");
-      let aElement = document.createElement("a");
-      // aElement.className = "active";
-      // aElement.onclick = ""
-      aElement.href = "#";
-      aElement.textContent = `${index + 1}`;
-      liElement.append(aElement);
-      nestedUL.append(liElement)
+      let listElement = document.createElement("li"); //create li and a elements for every loop
+      let anchorElement = document.createElement("a");
+      anchorElement.href = "#"; // adds attribute to a element
+      anchorElement.textContent = `${index + 1}`;  // adds text content to a elements
+      listElement.append(anchorElement);
+      nestedUL.append(listElement) // adds elements to parent ul element
    }
-   nestedUL.firstChild.firstChild.className = "active";
-   // document.querySelector(".pagination ul li a")
-   // let alll = document.querySelectorAll(".pagination ul li a")
 
-   // alll.addEventListener("click", function () {
-   //    console.log("hello");
-   // });
-   for (let index = 0; index < totalPages; index++) {
-      nestedUL.firstChild.firstChild.addEventListener("click", function () {
-         console.log("hellow");
+   nestedUL.firstChild.firstChild.className = "active";  // adds class"active" to first anchor element
+   let theChildren = divPagination.firstChild.childNodes; // create a list of the li nodes nested in ul element
+
+   for (let index = 0; index < theChildren.length; index++) { // adds event listener to every a element
+      theChildren[index].addEventListener("click", function (event) {
+         for (let indexx = 0; indexx < theChildren.length; indexx++) {
+            theChildren[indexx].firstChild.removeAttribute("class") //on click removes class attribute from all anchor tags
+         }
+         let thetarget = event.target; // targets a element clicked 
+         thetarget.className = "active"; // adds class="active" to the clicked a element.
+         showPage(studentList, thetarget.textContent); //calls showPage () with updated arguements
       })
    }
-
-   // console.log(divContainer);   testing divContainer
-
-   // let total = Math.ceil(stdntList.length / numberOfItemsOnPage);
-   // console.log(total);  // testing total variable
-
-   divContainer.append(divPagination);
 }
-
+showPage(studentList, 1)
 appendPageLinks(studentList);
-// function appendPageLinks(studentList) {
-//    let total = Math.floor(studentListItem.length / numberOfItemsOnPage);
-//    // console.log(total);
-//    let siblingElem = document.querySelector(".student-list");
-//    // console.log(siblingElem);
-//    siblingElem.insertAdjacentHTML("afterend", '<div class="pagination"></div>');
-//    let paginationElem = document.querySelector(".pagination");
-//    let string = `<ul>`;
-
-
-
-//    // paginationElem.innerHTML += `<ul>`;
-
-//    // paginationElem.innerHTML += `</ul>`;
-
-//    for (let index = 0; index < total; index++) {
-
-//       let element = document.createElement("li").innerHTML = `<li><a class="active" href="#">1</a></li>`
-//       element.addEventListener()
-//       string += `<li><a class="active" href="#">1</a></li>`
-//    }
-
-
-// }
-
-// appendPageLinks(studentListItem);
-
-
-// Remember to delete the comments that came with this file, and replace them with your own code comments.
