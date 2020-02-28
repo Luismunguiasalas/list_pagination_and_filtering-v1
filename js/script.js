@@ -40,16 +40,16 @@ function showPage(stdntList, page) {
 
 function appendPageLinks(stdntList) {
    let totalPages = Math.ceil(stdntList.length / numberOfItemsOnPage); // get page number
-   let divContainer = document.querySelector(".page");  // get paremt div.page container
-   let divPagination = document.createElement("div");   // create div pagination container
-   let nestedUL = document.createElement("ul");         // create nested ul element
+   const divContainer = document.querySelector(".page");  // get paremt div.page container
+   const divPagination = document.createElement("div");   // create div pagination container
+   const nestedUL = document.createElement("ul");         // create nested ul element
    divPagination.className = "pagination";              // add class to div pagination container 
    divPagination.append(nestedUL);                       // add ul into div pagination container
    divContainer.append(divPagination);  // add div pagination container to parent div.page container 
 
    for (let index = 0; index < totalPages; index++) {
-      let listElement = document.createElement("li"); //create li and a elements for every loop
-      let anchorElement = document.createElement("a");
+      const listElement = document.createElement("li"); //create li and a elements for every loop
+      const anchorElement = document.createElement("a");
       anchorElement.href = "#"; // adds attribute to a element
       anchorElement.textContent = `${index + 1}`;  // adds text content to a elements
       listElement.append(anchorElement);
@@ -57,7 +57,7 @@ function appendPageLinks(stdntList) {
    }
 
    nestedUL.firstChild.firstChild.className = "active";  // adds class"active" to first anchor element
-   let theChildren = divPagination.firstChild.childNodes; // create a list of the li nodes nested in ul element
+   const theChildren = divPagination.firstChild.childNodes; // create a list of the li nodes nested in ul element
 
    for (let index = 0; index < theChildren.length; index++) { // adds event listener to every a element
       theChildren[index].addEventListener("click", function (event) {
